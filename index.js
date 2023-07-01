@@ -22,9 +22,9 @@ app.get("/", (req, res) => {
   res.send({ title: "Uthoob Videos" });
 });
 
-app.get('/videos/:channelId', (req, res) => {
+app.get('/:videos/:channelId', (req, res) => {
     const channelId = req.params.channelId; 
-    const videos = req.body.videos; 
+    const videos = req.params.videos; 
 
     try {
       // Create an array to store the video documents
