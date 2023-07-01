@@ -1,0 +1,17 @@
+{
+  "name": "uthoob-backend",
+  "version": "1.0.0",
+  "description": "A simple node.js backend to store user's subscription (channelId) and their following videos data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.3.1"
+  }
+}
