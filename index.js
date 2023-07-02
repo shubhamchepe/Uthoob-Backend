@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 
 app.post('/videos/:channelId', async (req, res) => {
     const channelId = req.params.channelId; 
-    console.log(req);
+    console.log(req.body);
     const videos = req.body.videos; 
    
 
