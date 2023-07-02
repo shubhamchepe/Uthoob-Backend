@@ -63,6 +63,7 @@ app.post('/videos/:channelId', async (req, res) => {
         })
         something = [
                 {
+                  channelId:channelId,  
                   id: video.id,
                   snippet: {
                     publishedAt: video.snippet.publishedAt,
