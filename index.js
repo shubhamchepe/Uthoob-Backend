@@ -90,7 +90,7 @@ app.post('/videos/:channelId', async (req, res) => {
     try{
         const result = await Video.findOne({ channelId }).exec()
         if(result){
-         res.json({ result });
+            return res.send(true)
         }else{
           return res.send(false)
         }
