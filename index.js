@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 app.post('/videos/:channelId', async (req, res) => {
     const channelId = req.params.channelId; 
     const videos = req.body.videos; 
+    console.log(red.body);
 
     try {
       // Create an array to store the video documents
