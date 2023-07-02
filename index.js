@@ -94,7 +94,6 @@ app.post('/videos/:channelId', async (req, res) => {
         }else{
           return res.send(false)
         }
-        res.send({result})
     }catch(error){
         console.log(error)
     }
