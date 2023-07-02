@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.send({ title: "Uthoob Videos" });
 });
 
-app.get('/videos/:channelId', (req, res) => {
+app.get('/videos/:channelId', async (req, res) => {
     const channelId = req.params.channelId; 
     const videos = req.body.videos; 
 
@@ -51,7 +51,7 @@ app.get('/videos/:channelId', (req, res) => {
       }));
   
       // Insert the array of video documents into the 'videos' collection
-      Video.insertMany(videoDocuments)
+      await Video.insertMany(videoDocuments)
         .then(() => {
           res.send({ message: 'Videos stored successfully' });
         })
