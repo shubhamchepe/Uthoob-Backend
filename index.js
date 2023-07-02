@@ -98,7 +98,7 @@ app.post('/videos/:channelId', async (req, res) => {
         try {
             const result = await Video.findOneAndUpdate(
               { channelId: channelId },
-              { video: videoDocuments },
+              { videos: videoDocuments },
               { upsert: true, new: true }
             );
             console.log('Document updated or created:', result);
