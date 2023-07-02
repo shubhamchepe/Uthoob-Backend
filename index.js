@@ -95,19 +95,16 @@ app.post('/videos/:channelId', async (req, res) => {
           res.status(500).send({ error: 'Error storing videos' });
         });
       }else{
-        Video.findOneAndUpdate(
-            { channelId }, // search criteria
-            { $set: { video: videoDocuments } }, // update with new array
-            { upsert: true, returnOriginal: false }, // options
-            (error, result) => {
-              if (error) {
-                console.error('Error updating or creating document:', error);
-                return;
-              }
-          
-              console.log('Document updated or created:', result.value);
-            }
-          );
+        try {
+            const result = await Video.findOneAndUpdate(
+              { channelId },
+              { video: videoDocuments },
+              { upsert: true, new: true }
+            );
+            console.log('Document updated or created:', result);
+          } catch (error) {
+            console.error('Error updating or creating document:', error);
+          }
       }
 
       console.log('FIND ONE',FindOne);
