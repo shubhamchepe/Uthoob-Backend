@@ -30,52 +30,80 @@ app.get("/", (req, res) => {
 });
 
 app.post('/videos/:channelId', async (req, res) => {
-    const channelId = req.params.channelId;
+    const channelId = req.params.channelId; 
+    console.log('TYPEOF',typeof req.body.videos);
     const videos = Object.values(req.body.videos);
-  
+   
+
     try {
       // Create an array to store the video documents
-      const videoDocuments = videos.map((video) => ({
-        videos: [
-          {
-            id: video.id,
-            snippet: {
-              publishedAt: video.snippet.publishedAt,
-              title: video.snippet.title,
-              description: video?.snippet?.description,
-              thumbnails: {
-                default: {
-                  url: video.snippet.thumbnails.default.url,
-                  width: video.snippet.thumbnails.default.width,
-                  height: video.snippet.thumbnails.default.height,
+      const videoDocuments = []
+      let something = {}
+      videos.forEach(video => {
+        console.log(video);
+         videoDocuments.push({
+            videos: [
+                {
+                  id: video.id,
+                  snippet: {
+                    publishedAt: video.snippet.publishedAt,
+                    title: video.snippet.title,
+                    description: video?.snippet?.description,
+                    thumbnails: {
+                      default: {
+                        url: video.snippet.thumbnails.default.url,
+                        width: video.snippet.thumbnails.default.width,
+                        height: video.snippet.thumbnails.default.height,
+                      },
+                    },
+                    channelTitle: video.snippet.channelTitle,
+                  },
                 },
-              },
-              channelTitle: video.snippet.channelTitle,
-            },
-          },
-        ],
-      }));
-  
+            ]
+        })
+        something = [
+                {
+                  channelId:channelId,  
+                  id: video.id,
+                  snippet: {
+                    publishedAt: video.snippet.publishedAt,
+                    title: video.snippet.title,
+                    description: video?.snippet?.description,
+                    thumbnails: {
+                      default: {
+                        url: video.snippet.thumbnails.default.url,
+                        width: video.snippet.thumbnails.default.width,
+                        height: video.snippet.thumbnails.default.height,
+                      },
+                    },
+                    channelTitle: video.snippet.channelTitle,
+                  },
+                },
+            ]
+        
+      });
+
+        
       const existingDocument = await Video.findOne({ channelId }).exec();
-  
-      if (existingDocument) {
-        // Update the existing document
-        existingDocument.videos = videoDocuments;
-        await existingDocument.save();
-        console.log('Document updated:', existingDocument);
-      } else {
-        // Create a new document
-        const newDocument = await Video.create({ channelId, videos: videoDocuments });
-        console.log('Document created:', newDocument);
-      }
-  
-      console.log('VIDEO DOCUMENT', videoDocuments);
-      res.status(200).send('Videos updated successfully.');
-    } catch (error) {
-      console.error('Error updating or creating document:', error);
-      res.status(400).send({ error: 'Invalid videos data' });
+
+    if (existingDocument) {
+      // Update the existing document
+      existingDocument.videos = videoDocuments;
+      await existingDocument.save();
+      console.log('Document updated:', existingDocument);
+    } else {
+      // Create a new document
+      const newDocument = await Video.create({ channelId, videos: something });
+      console.log('Document created:', newDocument);
     }
-  });
+
+    console.log('VIDEO DOCUMENT', videoDocuments);
+    res.status(200).send('Videos updated successfully.');
+  } catch (error) {
+    console.error('Error updating or creating document:', error);
+    res.status(400).send({ error: 'Invalid videos data' });
+  }
+});
 
   app.get('/:channelId', (req, res) => {
     const channelId = req.params.channelId; // Assuming the channelId is passed as a route parameter
