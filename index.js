@@ -61,9 +61,28 @@ app.post('/videos/:channelId', async (req, res) => {
                 },
             ]
         })
+        something = [
+                {
+                  id: video.id,
+                  snippet: {
+                    publishedAt: video.snippet.publishedAt,
+                    title: video.snippet.title,
+                    description: video?.snippet?.description,
+                    thumbnails: {
+                      default: {
+                        url: video.snippet.thumbnails.default.url,
+                        width: video.snippet.thumbnails.default.width,
+                        height: video.snippet.thumbnails.default.height,
+                      },
+                    },
+                    channelTitle: video.snippet.channelTitle,
+                  },
+                },
+            ]
+        
       });
 
-        console.log(videoDocuments);
+        
       // Insert the array of video documents into the 'videos' collection
       const FindOne = await Video.findOne({ channelId: channelId }).exec()
       if(FindOne === null){
@@ -76,13 +95,16 @@ app.post('/videos/:channelId', async (req, res) => {
           res.status(500).send({ error: 'Error storing videos' });
         });
       }else{
-        Video.findOneAndReplace(
-            { channelId: channelId},
-            { "videos": videoDocuments }
-          )
+        FindOne[videos]=videoDocuments
+        FindOne.save()
+        // Video.findOneAndReplace(
+        //     { channelId: channelId},
+        //     { "videos": videoDocuments }
+        //   )
       }
 
       console.log('FIND ONE',FindOne);
+      console.log('VIDEO DOCUMENT',videoDocuments);
       
     } catch (error) {
         console.log('Invalid videos data',error)
