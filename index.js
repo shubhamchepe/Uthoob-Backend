@@ -40,6 +40,7 @@ app.post('/videos/:channelId', async (req, res) => {
       const videoDocuments = []
 
       videos.forEach(video => {
+        console.log(video);
         videoDocuments.push({
             channelId : channelId,
             videos: [
