@@ -36,25 +36,20 @@ app.post('/videos/:channelId', async (req, res) => {
     try {
       // Create an array to store the video documents
       const videoDocuments = videos.map((video) => ({
-
-        videos: [
-          {
-            id: video.id,
-            snippet: {
-              publishedAt: video.snippet.publishedAt,
-              title: video.snippet.title,
-              description: video?.snippet?.description,
-              thumbnails: {
-                default: {
-                  url: video.snippet.thumbnails.default.url,
-                  width: video.snippet.thumbnails.default.width,
-                  height: video.snippet.thumbnails.default.height,
-                },
-              },
-              channelTitle: video.snippet.channelTitle,
+        id: video.id,
+        snippet: {
+          publishedAt: video.snippet.publishedAt,
+          title: video.snippet.title,
+          description: video?.snippet?.description,
+          thumbnails: {
+            default: {
+              url: video.snippet.thumbnails.default.url,
+              width: video.snippet.thumbnails.default.width,
+              height: video.snippet.thumbnails.default.height,
             },
           },
-        ],
+          channelTitle: video.snippet.channelTitle,
+        },
       }));
   
       const existingDocument = await Video.findOne({ channelId }).exec();
