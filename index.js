@@ -38,10 +38,10 @@ app.post('/videos/:channelId', async (req, res) => {
     try {
       // Create an array to store the video documents
       const videoDocuments = []
-
+      let something = {}
       videos.forEach(video => {
         console.log(video);
-        videoDocuments.push({
+         something = {
             channelId : channelId,
             videos: [
                 {
@@ -61,15 +61,14 @@ app.post('/videos/:channelId', async (req, res) => {
                   },
                 },
             ]
-        })
+        }
       });
+
         console.log(videoDocuments);
       // Insert the array of video documents into the 'videos' collection
       const FindOne = await Video.findOne({ channelId: channelId }).exec()
-
-      console.log('FIND ONE',FindOne);
-      
-      await Video.insertMany(videoDocuments)
+      if(FindOne === null){
+        await Video.insertMany(something)
         .then(() => {
           res.send({ message: 'Videos stored successfully' });
         })
@@ -77,6 +76,12 @@ app.post('/videos/:channelId', async (req, res) => {
             console.log('Error storing videos',error)
           res.status(500).send({ error: 'Error storing videos' });
         });
+      }else{
+
+      }
+
+      console.log('FIND ONE',FindOne);
+      
     } catch (error) {
         console.log('Invalid videos data',error)
       res.status(400).send({ error: 'Invalid videos data' });
