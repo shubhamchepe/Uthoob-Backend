@@ -2,8 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const Video = require('./models/videos');
+const bodyParser = require('body-parser')
+
 
 const app = express();
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 const PORT = process.env.PORT || 3000;
 
 mongoose.set("strictQuery", false);
