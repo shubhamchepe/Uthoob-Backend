@@ -65,6 +65,10 @@ app.post('/videos/:channelId', async (req, res) => {
       });
         console.log(videoDocuments);
       // Insert the array of video documents into the 'videos' collection
+      const FindOne = await Video.findOne({ channelId: channelId }).exec()
+
+      console.log('FIND ONE',FindOne);
+      
       await Video.insertMany(videoDocuments)
         .then(() => {
           res.send({ message: 'Videos stored successfully' });
