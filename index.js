@@ -30,113 +30,49 @@ app.get("/", (req, res) => {
 });
 
 app.post('/videos/:channelId', async (req, res) => {
-    const channelId = req.params.channelId; 
-    console.log('TYPEOF',typeof req.body.videos);
+    const channelId = req.params.channelId;
     const videos = Object.values(req.body.videos);
-   
-
+  
     try {
       // Create an array to store the video documents
-      const videoDocuments = []
-      let something = {}
-      videos.forEach(video => {
-        console.log(video);
-         videoDocuments.push({
-            videos: [
-                {
-                  id: video.id,
-                  snippet: {
-                    publishedAt: video.snippet.publishedAt,
-                    title: video.snippet.title,
-                    description: video?.snippet?.description,
-                    thumbnails: {
-                      default: {
-                        url: video.snippet.thumbnails.default.url,
-                        width: video.snippet.thumbnails.default.width,
-                        height: video.snippet.thumbnails.default.height,
-                      },
-                    },
-                    channelTitle: video.snippet.channelTitle,
-                  },
+      const videoDocuments = videos.map((video) => ({
+        videos: [
+          {
+            id: video.id,
+            snippet: {
+              publishedAt: video.snippet.publishedAt,
+              title: video.snippet.title,
+              description: video?.snippet?.description,
+              thumbnails: {
+                default: {
+                  url: video.snippet.thumbnails.default.url,
+                  width: video.snippet.thumbnails.default.width,
+                  height: video.snippet.thumbnails.default.height,
                 },
-            ]
-        })
-        something = [
-                {
-                  channelId:channelId,  
-                  id: video.id,
-                  snippet: {
-                    publishedAt: video.snippet.publishedAt,
-                    title: video.snippet.title,
-                    description: video?.snippet?.description,
-                    thumbnails: {
-                      default: {
-                        url: video.snippet.thumbnails.default.url,
-                        width: video.snippet.thumbnails.default.width,
-                        height: video.snippet.thumbnails.default.height,
-                      },
-                    },
-                    channelTitle: video.snippet.channelTitle,
-                  },
-                },
-            ]
-        
-      });
-
-        
-      // Insert the array of video documents into the 'videos' collection
-      const FindOne = await Video.findOne({ channelId: channelId }).exec()
-      Video.findOne({ channelId })
-  .then((document) => {
-    if (document) {
-      // Update the existing document
-      document.data = videoDocuments;
-      return document.save();
-    } else {
-      // Create a new document
-      return Video.create({ channelId, videos: something });
-    }
-  })
-  .then((result) => {
-    console.log('Document updated or created:', result);
-  })
-  .catch((error) => {
-    console.error('Error updating or creating document:', error);
-  });
-//       if(FindOne === null){
-//         await Video.insertMany(something)
-//         .then(() => {
-//           res.send({ message: 'Videos stored successfully' });
-//         })
-//         .catch((error) => {
-//             console.log('Error storing videos',error)
-//           res.status(500).send({ error: 'Error storing videos' });
-//         });
-//       }else{
-//         Video.findOne({ channelId })
-//   .then((document) => {
-//     if (document) {
-//       // Update the existing document
-//       document.data = newData;
-//       return document.save();
-//     } else {
-//       // Create a new document
-//       return Model.create({ channelid, data: newData });
-//     }
-//   })
-//   .then((result) => {
-//     console.log('Document updated or created:', result);
-//   })
-//   .catch((error) => {
-//     console.error('Error updating or creating document:', error);
-//   });
-//       }
-
-      console.log('FIND ONE',FindOne);
-      console.log('VIDEO DOCUMENT',videoDocuments);
-      
+              },
+              channelTitle: video.snippet.channelTitle,
+            },
+          },
+        ],
+      }));
+  
+      const existingDocument = await Video.findOne({ channelId }).exec();
+  
+      if (existingDocument) {
+        // Update the existing document
+        existingDocument.videos = videoDocuments;
+        await existingDocument.save();
+        console.log('Document updated:', existingDocument);
+      } else {
+        // Create a new document
+        const newDocument = await Video.create({ channelId, videos: videoDocuments });
+        console.log('Document created:', newDocument);
+      }
+  
+      console.log('VIDEO DOCUMENT', videoDocuments);
+      res.status(200).send('Videos updated successfully.');
     } catch (error) {
-        console.log('Invalid videos data',error)
+      console.error('Error updating or creating document:', error);
       res.status(400).send({ error: 'Invalid videos data' });
     }
   });
