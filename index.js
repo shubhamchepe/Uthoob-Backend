@@ -86,27 +86,51 @@ app.post('/videos/:channelId', async (req, res) => {
         
       // Insert the array of video documents into the 'videos' collection
       const FindOne = await Video.findOne({ channelId: channelId }).exec()
-      if(FindOne === null){
-        await Video.insertMany(something)
-        .then(() => {
-          res.send({ message: 'Videos stored successfully' });
-        })
-        .catch((error) => {
-            console.log('Error storing videos',error)
-          res.status(500).send({ error: 'Error storing videos' });
-        });
-      }else{
-        try {
-            const result = await Video.findOneAndUpdate(
-              { channelId: channelId },
-              { videos: videoDocuments },
-              { upsert: true, new: true }
-            );
-            console.log('Document updated or created:', result);
-          } catch (error) {
-            console.error('Error updating or creating document:', error);
-          }
-      }
+      Video.findOne({ channelId })
+  .then((document) => {
+    if (document) {
+      // Update the existing document
+      document.data = videoDocuments;
+      return document.save();
+    } else {
+      // Create a new document
+      return Video.create({ channelId, videos: something });
+    }
+  })
+  .then((result) => {
+    console.log('Document updated or created:', result);
+  })
+  .catch((error) => {
+    console.error('Error updating or creating document:', error);
+  });
+//       if(FindOne === null){
+//         await Video.insertMany(something)
+//         .then(() => {
+//           res.send({ message: 'Videos stored successfully' });
+//         })
+//         .catch((error) => {
+//             console.log('Error storing videos',error)
+//           res.status(500).send({ error: 'Error storing videos' });
+//         });
+//       }else{
+//         Video.findOne({ channelId })
+//   .then((document) => {
+//     if (document) {
+//       // Update the existing document
+//       document.data = newData;
+//       return document.save();
+//     } else {
+//       // Create a new document
+//       return Model.create({ channelid, data: newData });
+//     }
+//   })
+//   .then((result) => {
+//     console.log('Document updated or created:', result);
+//   })
+//   .catch((error) => {
+//     console.error('Error updating or creating document:', error);
+//   });
+//       }
 
       console.log('FIND ONE',FindOne);
       console.log('VIDEO DOCUMENT',videoDocuments);
