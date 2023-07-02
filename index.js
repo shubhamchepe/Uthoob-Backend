@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.send({ title: "Uthoob Videos" });
 });
 
-app.get('/videos/:channelId', async (req, res) => {
+app.post('/videos/:channelId', async (req, res) => {
     const channelId = req.params.channelId; 
     const videos = req.body.videos; 
 
