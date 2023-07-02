@@ -85,6 +85,17 @@ app.post('/videos/:channelId', async (req, res) => {
       });
   });
 
+  app.get('/check-videos-in-db/:channelId', async (req,res)=>{
+    const channelId = req.params.channelId;
+    try{
+        const result = await Video.findOne({ channelId }).exec()
+        res.send({Value : result})
+    }catch(error){
+        console.log(error)
+    }
+    
+  })
+
  
 
 connectDB().then(() =>{
