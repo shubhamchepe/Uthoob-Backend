@@ -88,14 +88,11 @@ app.post('/videos/:channelId', async (req, res) => {
   app.get('/check-videos-in-db/:channelId', async (req,res)=>{
     const channelId = req.params.channelId;
     try{
-        const result = await Video.findOne({ channelId }).exec()
-        if(result){
-            return res.send(true)
-        }else{
-          return res.send(false)
-        }
+        const result = await Video.exists({ channelId });
+        return res.send(result);
     }catch(error){
-        console.log(error)
+        console.log(error);
+        res.status(500).send('An error occurred');
     }
     
   })
