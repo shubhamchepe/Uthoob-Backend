@@ -41,8 +41,7 @@ app.post('/videos/:channelId', async (req, res) => {
       let something = {}
       videos.forEach(video => {
         console.log(video);
-         something = {
-            channelId : channelId,
+         videoDocuments.push({
             videos: [
                 {
                   id: video.id,
@@ -61,7 +60,7 @@ app.post('/videos/:channelId', async (req, res) => {
                   },
                 },
             ]
-        }
+        })
       });
 
         console.log(videoDocuments);
@@ -77,7 +76,10 @@ app.post('/videos/:channelId', async (req, res) => {
           res.status(500).send({ error: 'Error storing videos' });
         });
       }else{
-
+        Video.findOneAndReplace(
+            { channelId: channelId},
+            { "videos": videoDocuments }
+          )
       }
 
       console.log('FIND ONE',FindOne);
