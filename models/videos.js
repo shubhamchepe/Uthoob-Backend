@@ -2,47 +2,37 @@ const mongoose = require('mongoose');
 
 const videoSchema = new mongoose.Schema({
   channelId: {
-    type: String,
-    required: true
+    type: String
   },
   videos: [
     {
       id: {
         type: String,
-        required: true
       },
       snippet: {
         publishedAt: {
           type: Date,
-          required: true
         },
         title: {
-          type: String,
-          required: true
+          type: String
         },
         description: {
-          type: String,
-          required: true
         },
         thumbnails: {
           default: {
             url: {
               type: String,
-              required: true
             },
             width: {
-              type: Number,
-              required: true
+              type: Number
             },
             height: {
-              type: Number,
-              required: true
+              type: Number
             }
           }
         },
         channelTitle: {
-          type: String,
-          required: true
+          type: String
         }
       
       }
