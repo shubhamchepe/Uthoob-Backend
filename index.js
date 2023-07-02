@@ -59,13 +59,14 @@ app.post('/videos/:channelId', async (req, res) => {
         existingDocument.videos = videoDocuments;
         await existingDocument.save();
         console.log('Document updated:', existingDocument);
+        res.json({videoDocuments})
       } else {
         // Create a new document
         const newDocument = await Video.create({ channelId, videos: videoDocuments });
         console.log('Document created:', newDocument);
+        res.json({videoDocuments})
       }
   
-      console.log('VIDEO DOCUMENT', videoDocuments);
       res.status(200).send('Videos updated successfully.');
     } catch (error) {
       console.error('Error updating or creating document:', error);
