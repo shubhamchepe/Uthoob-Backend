@@ -56,9 +56,11 @@ app.get('/videos/:channelId', async (req, res) => {
           res.send({ message: 'Videos stored successfully' });
         })
         .catch((error) => {
+            console.log('Error storing videos',error)
           res.status(500).send({ error: 'Error storing videos' });
         });
     } catch (error) {
+        console.log('Invalid videos data',error)
       res.status(400).send({ error: 'Invalid videos data' });
     }
   });
