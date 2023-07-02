@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 
 app.post('/videos/:channelId', async (req, res) => {
     const channelId = req.params.channelId; 
-    console.log(typeof req.body.videos);
+    console.log('TYPEOF',typeof req.body.videos);
     const videos = JSON.parse(req.body.videos); 
    
 
