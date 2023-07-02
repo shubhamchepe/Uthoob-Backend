@@ -97,7 +97,7 @@ app.post('/videos/:channelId', async (req, res) => {
       }else{
         try {
             const result = await Video.findOneAndUpdate(
-              { channelId },
+              { channelId: channelId },
               { video: videoDocuments },
               { upsert: true, new: true }
             );
