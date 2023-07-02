@@ -49,7 +49,7 @@ app.post('/videos/:channelId', async (req, res) => {
                   snippet: {
                     publishedAt: video.snippet.publishedAt,
                     title: video.snippet.title,
-                    description: video.snippet.description,
+                    description: video?.snippet?.description,
                     thumbnails: {
                       default: {
                         url: video.snippet.thumbnails.default.url,
@@ -63,7 +63,7 @@ app.post('/videos/:channelId', async (req, res) => {
             ]
         })
       });
-  
+        console.log(videoDocuments);
       // Insert the array of video documents into the 'videos' collection
       await Video.insertMany(videoDocuments)
         .then(() => {
